@@ -24,6 +24,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     
     // Gerenciador de Layout
     private CardLayout cardLayout;
+    private PainelTarefas painelTarefas = new PainelTarefas();
+    private PainelProjetos painelProjetos = new PainelProjetos();
     
     public TelaPrincipal() {
         initComponents();
@@ -35,10 +37,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
         painelPrincipal.setLayout(cardLayout);
         
         //Adicionando os cards
-        painelPrincipal.add(new PainelTarefas(),"Tarefas");        
-        painelPrincipal.add(new PainelProjetos(),"Projetos");
+        painelPrincipal.add(painelTarefas,"Tarefas");        
+        painelPrincipal.add(painelProjetos,"Projetos");
         
-        //Definindo o padrão
+        //Definindo o card padrão
         this.cardLayout.show(painelPrincipal, "Tarefas");
         
         //Corrigindo o tamanho do painel lateral
@@ -200,11 +202,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void btnProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProjetosActionPerformed
         
+        System.out.println("Chamando a tela de Projetos");
+        
         this.cardLayout.show(painelPrincipal, "Projetos");
+        this.painelProjetos.carregarDados();
+        
         painelPrincipal.revalidate();
         painelPrincipal.repaint();
-        
-        System.out.println("Chamando a tela de Projetos");
         
     }//GEN-LAST:event_btnProjetosActionPerformed
 
@@ -214,11 +218,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void btnTarefasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTarefasActionPerformed
         
+        System.out.println("Chamando a tela de Tarefas");
+        
         this.cardLayout.show(painelPrincipal, "Tarefas");
+        
         painelPrincipal.revalidate();
         painelPrincipal.repaint();
-        
-        System.out.println("Chamando a tela de Tarefas");
         
     }//GEN-LAST:event_btnTarefasActionPerformed
 

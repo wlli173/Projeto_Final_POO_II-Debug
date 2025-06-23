@@ -13,7 +13,7 @@ public class MembrosProjetoDAO {
     
     public void inserirMembro(int idProjeto, int idUsuario) {
 
-        String sql = "INSERT INTO membros_projeto (idProjeto, idUsuario) VALUES (?, ?)";
+        String sql = "INSERT INTO membros_projeto (id_projeto, id_usuario) VALUES (?, ?)";
         
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -29,7 +29,7 @@ public class MembrosProjetoDAO {
 
     public void removerMembro(int idProjeto, int idUsuario) {
 
-        String sql = "DELETE FROM membros_projeto WHERE idProjeto = ? AND idUsuario = ?";
+        String sql = "DELETE FROM membros_projeto WHERE id_projeto = ? AND id_usuario = ?";
         
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -46,9 +46,9 @@ public class MembrosProjetoDAO {
     public List<Usuario> listarMembros(int idProjeto) {
 
         List<Usuario> membros = new ArrayList<>();
-        String sql = "SELECT u.idUsuario, u.nome, u.email FROM usuarios u " +
-                     "JOIN membros_projeto mp ON u.idUsuario = mp.idUsuario " +
-                     "WHERE mp.idProjeto = ?";
+        String sql = "SELECT u.id_usuario, u.nome, u.email FROM usuarios u " +
+                     "JOIN membros_projeto mp ON u.id_usuario = mp.id_usuario " +
+                     "WHERE mp.id_projeto = ?";
         
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -57,7 +57,7 @@ public class MembrosProjetoDAO {
             var rs = pstmt.executeQuery();
             
             while (rs.next()) {
-                int idUsuario = rs.getInt("idUsuario");
+                int idUsuario = rs.getInt("id_usuario");
                 String nome = rs.getString("nome");
                 String email = rs.getString("email");
                 
@@ -75,9 +75,9 @@ public class MembrosProjetoDAO {
 
     public Usuario buscarMembros(int idProjeto, int idUsuario) {
 
-        String sql = "SELECT u.idUsuario, u.nome, u.email FROM usuarios u " +
-                     "JOIN membros_projeto mp ON u.idUsuario = mp.idUsuario " +
-                     "WHERE mp.idProjeto = ? AND mp.idUsuario = ?";
+        String sql = "SELECT u.id_usuario, u.nome, u.email FROM usuarios u " +
+                     "JOIN membros_projeto mp ON u.id_usuario = mp.id_usuario " +
+                     "WHERE mp.id_projeto = ? AND mp.id_usuario = ?";
         
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -87,7 +87,7 @@ public class MembrosProjetoDAO {
             var rs = pstmt.executeQuery();
             
             if (rs.next()) {
-                int id = rs.getInt("idUsuario");
+                int id = rs.getInt("id_usuario");
                 String nome = rs.getString("nome");
                 String email = rs.getString("email");
                 
@@ -104,9 +104,9 @@ public class MembrosProjetoDAO {
 
     public Usuario buscarMembroPorNome(int idProjeto, String nome) {
 
-        String sql = "SELECT u.idUsuario, u.nome, u.email FROM usuarios u " +
-                     "JOIN membros_projeto mp ON u.idUsuario = mp.idUsuario " +
-                     "WHERE mp.idProjeto = ? AND u.nome = ?";
+        String sql = "SELECT u.id_usuario, u.nome, u.email FROM usuarios u " +
+                     "JOIN membros_projeto mp ON u.id_usuario = mp.id_usuario " +
+                     "WHERE mp.id_projeto = ? AND u.nome = ?";
         
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -116,7 +116,7 @@ public class MembrosProjetoDAO {
             var rs = pstmt.executeQuery();
             
             if (rs.next()) {
-                int idUsuario = rs.getInt("idUsuario");
+                int idUsuario = rs.getInt("id_usuario");
                 String email = rs.getString("email");
                 
                 return new Usuario(idUsuario, nome, email);

@@ -16,8 +16,7 @@ public class UsuariosDAO {
         String sql = "INSERT INTO usuarios (nome, email, senha_hash) VALUES (?, ?, ?)";
         
         try (Connection conn = ConexaoBD.getConnection();
-
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
              
             pstmt.setString(1, nome);
             pstmt.setString(2, email);

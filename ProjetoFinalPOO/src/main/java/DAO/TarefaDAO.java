@@ -17,7 +17,7 @@ public class TarefaDAO {
     
     public void criarTarefa(Tarefa tarefa) {
         
-        String sql = "INSERT INTO Tarefa (titulo, descricao, dataFimPrevisto, status, idProjeto) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Tarefa (titulo, descricao, dataFimPrevisto, status, id_projeto) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -114,7 +114,7 @@ public class TarefaDAO {
 
     public List<Tarefa> listarTarefasPorProjeto(int idProjeto) {
         
-        String sql = "SELECT * FROM Tarefa WHERE idProjeto = ?";
+        String sql = "SELECT * FROM Tarefa WHERE id_projeto = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -166,7 +166,7 @@ public class TarefaDAO {
                 String dataFimPrevisto = resultSet.getString("dataFimPrevisto");
                 String statusStr = resultSet.getString("status");
                 StatusTarefa status = StatusTarefa.valueOf(statusStr);
-                int idProjeto = resultSet.getInt("idProjeto");
+                int idProjeto = resultSet.getInt("id_projeto");
                 
                 return new Tarefa(idTarefa, titulo, descricao, dataFimPrevisto, status, idProjeto);
             }
@@ -202,7 +202,7 @@ public class TarefaDAO {
                 String dataFimPrevisto = resultSet.getString("dataFimPrevisto");
                 String statusStr = resultSet.getString("status");
                 StatusTarefa status = StatusTarefa.valueOf(statusStr);
-                int idProjeto = resultSet.getInt("idProjeto");
+                int idProjeto = resultSet.getInt("id_projeto");
                 
                 Tarefa tarefa = new Tarefa(idTarefa, titulo, descricao, dataFimPrevisto, status, idProjeto);
                 tarefas.add(tarefa);

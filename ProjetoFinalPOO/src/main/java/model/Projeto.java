@@ -94,7 +94,7 @@ public class Projeto {
 
     public int quantidadeTarefas() {
         
-        String sql = "SELECT COUNT(*) FROM tarefas WHERE idProjeto = ?";
+        String sql = "SELECT COUNT(*) FROM tarefas WHERE id_projeto = ?";
         
          try(Connection conn = ConexaoBD.getConnection()) {
 
@@ -118,7 +118,7 @@ public class Projeto {
 
     private int quantidadeTarefasConcluidas() {
         
-        String sql = "SELECT COUNT(*) FROM tarefas WHERE idProjeto = ? AND status = 'Concluída'";
+        String sql = "SELECT COUNT(*) FROM tarefas WHERE id_projeto = ? AND status = 'Concluída'";
         
          try(Connection conn = ConexaoBD.getConnection()) {
 

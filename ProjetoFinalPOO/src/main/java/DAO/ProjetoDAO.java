@@ -8,13 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Projeto;
+import model.Usuario;
 import util.ConexaoBD;
 
 public class ProjetoDAO {
     
     public void inserirProjeto(Projeto projeto) {
         
-        String sql = "INSERT INTO projeto (nome, descricao, dataCriacao, dataFimPrevista, idLider) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO projetos (nome, descricao, data_criacao, data_fim_prevista, id_lider) VALUES (?, ?, ?, ?, ?)";
 
         try(Connection conn = ConexaoBD.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -24,6 +25,7 @@ public class ProjetoDAO {
             pstmt.setString(3, projeto.getDataCriacao());
             pstmt.setString(4, projeto.getDataFimPrevista());
             pstmt.setInt(5, projeto.getIdLider());  
+            pstmt.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println("Erro: " + e.getMessage());
@@ -33,7 +35,7 @@ public class ProjetoDAO {
 
     public void atualizarProjeto(Projeto projeto) {
         
-        String sql = "UPDATE projeto SET nome = ?, descricao = ?, dataFimPrevista = ? WHERE idProjeto = ?";
+        String sql = "UPDATE projetos SET nome = ?, descricao = ?, dataFimPrevista = ? WHERE id_projeto = ?";
 
         try(Connection conn = ConexaoBD.getConnection();
 
@@ -54,7 +56,7 @@ public class ProjetoDAO {
 
     public void excluirProjeto(int idProjeto) {
         
-        String sql = "DELETE FROM projeto WHERE idProjeto = ?";
+        String sql = "DELETE FROM projetos WHERE id_projeto = ?";
 
         try(Connection conn = ConexaoBD.getConnection();
 
@@ -75,7 +77,7 @@ public class ProjetoDAO {
 
     public Projeto buscarProjetoPorId(int idProjeto) {
         
-        String sql = "SELECT * FROM projeto WHERE idProjeto = ?";
+        String sql = "SELECT * FROM projetos WHERE id_projeto = ?";
         Projeto projeto = null;
 
         try(Connection conn = ConexaoBD.getConnection();
@@ -85,14 +87,7 @@ public class ProjetoDAO {
             var rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return new Projeto(
-                    rs.getInt("idProjeto"),
-                    rs.getString("nome"),
-                    rs.getString("descricao"),
-                    rs.getString("dataCriacao"),
-                    rs.getString("dataFimPrevista"),
-                    rs.getInt("idLider")
-                );
+                projeto = construirProjeto(rs);
             }
 
         } catch (SQLException e) {
@@ -103,9 +98,9 @@ public class ProjetoDAO {
 
     }
 
-    public void buscarProjetoPorNome(String nome) {
+    public Projeto buscarProjetoPorNome(String nome) {
         
-        String sql = "SELECT * FROM projeto WHERE nome LIKE ?";
+        String sql = "SELECT * FROM projetos WHERE nome LIKE ?";
         nome = "%" + nome + "%";
         Projeto projeto = null;
 
@@ -116,25 +111,20 @@ public class ProjetoDAO {
             var rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                projeto = new Projeto(
-                    rs.getInt("idProjeto"),
-                    rs.getString("nome"),
-                    rs.getString("descricao"),
-                    rs.getString("dataCriacao"),
-                    rs.getString("dataFimPrevista"),
-                    rs.getInt("idLider")
-                );
+                projeto = construirProjeto(rs);
             }
 
         } catch (SQLException e) {
             System.out.println("Erro: " + e.getMessage());
         }
+        
+        return projeto;
 
     }
 
     public List<Projeto> listarProjetos() {
         
-        String sql = "SELECT * FROM projeto";
+        String sql = "SELECT * FROM projetos";
         List<Projeto> projetos = new ArrayList<>();
 
         try(Connection conn = ConexaoBD.getConnection();
@@ -142,14 +132,8 @@ public class ProjetoDAO {
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                projetos.add(new Projeto(
-                    rs.getInt("idProjeto"),
-                    rs.getString("nome"),
-                    rs.getString("descricao"),
-                    rs.getString("dataCriacao"),
-                    rs.getString("dataFimPrevista"),
-                    rs.getInt("idLider")
-                ));
+                Projeto projeto = construirProjeto(rs);
+                projetos.add(projeto);
             }
 
         } catch (SQLException e) {
@@ -160,6 +144,71 @@ public class ProjetoDAO {
 
     }
 
+    public List<Projeto> buscarProjetosDoLider(int idLider) {
+        
+        List<Projeto> projetos = new ArrayList<>();
+        String sql = "SELECT * FROM projetos WHERE id_lider = ?";
+
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idLider);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Projeto projeto = construirProjeto(rs);
+                projetos.add(projeto);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return projetos;
     
+    }
+
+    public List<Projeto> buscarProjetosDoMembro(int idUsuario) {
+        
+        List<Projeto> projetos = new ArrayList<>();
+        String sql = """
+            SELECT p.*
+            FROM projetos p
+            INNER JOIN membros_projeto mp ON p.id_projeto = mp.id_projeto
+            WHERE mp.id_usuario = ?
+            """;
+
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Projeto projeto = construirProjeto(rs);
+                projetos.add(projeto);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return projetos;
+    }
+
+    private Projeto construirProjeto(ResultSet rs) throws SQLException {
+        
+        int idProjeto = rs.getInt("id_projeto");
+        String nome = rs.getString("nome");
+        String descricao = rs.getString("descricao");
+        String dataCriacao = rs.getString("data_criacao");
+        String dataFim = rs.getString("data_fim_prevista");
+        int idLider = rs.getInt("id_lider");
+
+        Usuario lider = new UsuariosDAO().buscarUsuarioPorId(idLider);
+
+        return new Projeto(idProjeto, nome, descricao, dataCriacao, dataFim, lider.getIdUsuario());
+        
+    }
 
 }

@@ -4,7 +4,12 @@
  */
 package view;
 
-import java.awt.Color;
+import DAO.ProjetoDAO;
+import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
+import model.Projeto;
+import util.SessaoUsuario;
 
 /**
  *
@@ -17,7 +22,51 @@ public class PainelProjetos extends javax.swing.JPanel {
      */
     public PainelProjetos() {
         initComponents();
+        
+        this.painelGrid.setLayout(new GridLayout(0,2,10,10));
+        
+        //carregarDados();
+        
     }
+    
+    public void carregarDados(){
+        
+        System.out.println("Tentando carregar dados dos projetos");
+        
+        painelGrid.removeAll();
+        
+        List<Projeto> projetos;
+        
+        int idUsuarioLogado = SessaoUsuario.getUsuarioLogado().getIdUsuario();
+        
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        
+        if(this.rBtnMeusProjetos.isSelected()){
+            projetos = projetoDAO.buscarProjetosDoLider(idUsuarioLogado);
+        }else if(this.rBtnMembroProjetos.isSelected()){
+            projetos = projetoDAO.buscarProjetosDoMembro(idUsuarioLogado);
+        }   else {
+            projetos = new ArrayList<>();
+        }
+        
+        System.out.println("Debuging do carregamento de dados dos projetos\n-------------------------\n");
+        
+        if(projetos.isEmpty()){
+            System.err.println("Array de resultado da busca vazio");
+        }
+        
+        for (Projeto projeto : projetos) {
+            System.out.println(projeto.toString());
+            CardProjetos card = new CardProjetos();
+            card.setDadosProjeto(projeto);
+            painelGrid.add(card);
+        }
+
+        painelGrid.revalidate();
+        painelGrid.repaint();
+        
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,63 +80,95 @@ public class PainelProjetos extends javax.swing.JPanel {
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         jButton1 = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rBtnMeusProjetos = new javax.swing.JRadioButton();
+        rBtnMembroProjetos = new javax.swing.JRadioButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        painelGrid = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(1047, 457));
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButton1.setText("Novo Projeto");
 
-        jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
+        buttonGroup1.add(rBtnMeusProjetos);
+        rBtnMeusProjetos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rBtnMeusProjetos.setSelected(true);
+        rBtnMeusProjetos.setText("Meus Projetos:");
+        rBtnMeusProjetos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBtnMeusProjetosActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Meus Projetos:");
+        buttonGroup1.add(rBtnMembroProjetos);
+        rBtnMembroProjetos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rBtnMembroProjetos.setText("Projetos em que faço parte:");
+        rBtnMembroProjetos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rBtnMembroProjetosActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jRadioButton2.setText("Projetos em que faço parte:");
+        javax.swing.GroupLayout painelGridLayout = new javax.swing.GroupLayout(painelGrid);
+        painelGrid.setLayout(painelGridLayout);
+        painelGridLayout.setHorizontalGroup(
+            painelGridLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1045, Short.MAX_VALUE)
+        );
+        painelGridLayout.setVerticalGroup(
+            painelGridLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 359, Short.MAX_VALUE)
+        );
+
+        jScrollPane1.setViewportView(painelGrid);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
+                        .addComponent(rBtnMeusProjetos)
                         .addGap(18, 18, 18)
-                        .addComponent(jRadioButton2)))
-                .addContainerGap(263, Short.MAX_VALUE))
+                        .addComponent(rBtnMembroProjetos)))
+                .addContainerGap(641, Short.MAX_VALUE))
+            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
-                .addContainerGap(210, Short.MAX_VALUE))
+                    .addComponent(rBtnMeusProjetos)
+                    .addComponent(rBtnMembroProjetos))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void rBtnMeusProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBtnMeusProjetosActionPerformed
+        System.out.println("Meus projetos selecionado");
+        carregarDados();
+    }//GEN-LAST:event_rBtnMeusProjetosActionPerformed
+
+    private void rBtnMembroProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rBtnMembroProjetosActionPerformed
+        System.out.println("Projetos em que faço parte selecionado");
+        carregarDados();
+    }//GEN-LAST:event_rBtnMembroProjetosActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton jButton1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel painelGrid;
+    private javax.swing.JRadioButton rBtnMembroProjetos;
+    private javax.swing.JRadioButton rBtnMeusProjetos;
     // End of variables declaration//GEN-END:variables
 }
