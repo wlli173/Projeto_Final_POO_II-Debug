@@ -4,70 +4,28 @@
  */
 package view;
 
-import DAO.ProjetoDAO;
-import java.awt.GridLayout;
-import java.util.List;
-
 import model.Projeto;
-import model.Tarefa;
-import util.SessaoUsuario;
 
 /**
  *
  * @author Willighan
  */
-public class PainelTarefas extends javax.swing.JPanel {
+public class CardTarefasProjeto extends javax.swing.JPanel {
 
     /**
-     * Creates new form PainelTarefas
+     * Creates new form CardTarefasProjeto
      */
-    public PainelTarefas() {
-        
+    public CardTarefasProjeto() {
         initComponents();
+    }
+    
+    public void setDados(Projeto projeto){
         
-        this.painelGrid.setLayout(new GridLayout(0,1,10,10));
-        
-        painelGrid.removeAll();
-        
-        List<Projeto> projetos;
-        List<Tarefa> tarefas;
-        
-        int idUsuarioLogado = SessaoUsuario.getUsuarioLogado().getIdUsuario();
-        ProjetoDAO projetoDAO = new ProjetoDAO();
-        
-        projetos = projetoDAO.buscarProjetosDoMembro(idUsuarioLogado);
-        
-        //tarefas = projetoDAO.buscarTarefasDoUsuario(idUsuarioLogado);
-        
-        for(Projeto projeto : projetos){
-            
-            projeto.carregarTarefasDoUsuario(idUsuarioLogado, projetoDAO);
-            
-            CardTarefasProjeto cardTarefasPorProjeto = new CardTarefasProjeto();
-            cardTarefasPorProjeto.setDados(projeto);
-            
-            for(Tarefa tarefa : projeto.getTarefas()){
-                
-                CardTarefaIndividual cardTarefaIndividual = new CardTarefaIndividual();
-                cardTarefaIndividual.setDados(tarefa);
-                cardTarefasPorProjeto.add(cardTarefaIndividual);
-                
-            }
-            
-            this.painelGrid.add(cardTarefasPorProjeto);
-            
-        }
+        this.lblNomeProjeto.setText(projeto.getNome());
+        this.lblNomeLider.setText(projeto.getLider().getNome());
         
     }
 
-    public void carregarDados(){
-        
-        System.out.println("Tentando carregar dados das tarefas");
-        
-        
-        
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -77,24 +35,26 @@ public class PainelTarefas extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        lblNomeProjeto = new javax.swing.JLabel();
+        lblNomeLider = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         painelGrid = new javax.swing.JPanel();
 
-        setPreferredSize(new java.awt.Dimension(1047, 457));
+        lblNomeProjeto.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblNomeProjeto.setText("jLabel1");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel1.setText("Minhas Tarefas:");
+        lblNomeLider.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblNomeLider.setText("jLabel2");
 
         javax.swing.GroupLayout painelGridLayout = new javax.swing.GroupLayout(painelGrid);
         painelGrid.setLayout(painelGridLayout);
         painelGridLayout.setHorizontalGroup(
             painelGridLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1045, Short.MAX_VALUE)
+            .addGap(0, 398, Short.MAX_VALUE)
         );
         painelGridLayout.setVerticalGroup(
             painelGridLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 411, Short.MAX_VALUE)
+            .addGap(0, 254, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(painelGrid);
@@ -105,24 +65,29 @@ public class PainelTarefas extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lblNomeProjeto)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblNomeLider)
+                .addContainerGap(249, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNomeProjeto)
+                    .addComponent(lblNomeLider))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblNomeLider;
+    private javax.swing.JLabel lblNomeProjeto;
     private javax.swing.JPanel painelGrid;
     // End of variables declaration//GEN-END:variables
 }

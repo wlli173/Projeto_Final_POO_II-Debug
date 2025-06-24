@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Projeto;
+import model.StatusTarefa;
+import model.Tarefa;
 import model.Usuario;
 import util.ConexaoBD;
 
@@ -194,6 +196,126 @@ public class ProjetoDAO {
         }
 
         return projetos;
+    }
+
+    public int quantidadeTarefas(int idProjeto) {
+        
+        String sql = "SELECT COUNT(*) FROM tarefas WHERE id_projeto = ?";
+        
+         try(Connection conn = ConexaoBD.getConnection()) {
+
+            var preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, idProjeto);
+            var resultSet = preparedStatement.executeQuery();
+            
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+            return 0;
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+
+        return 0;
+
+    }
+
+    public int quantidadeTarefasConcluidas(int idProjeto) {
+        
+         // Método para contar as tarefas concluídas de um projeto específico
+         // Retorna o número de tarefas concluídas
+         // Se não houver tarefas, retorna 0
+        
+        String sql = "SELECT COUNT(*) FROM tarefas WHERE id_projeto = ? AND status = 'Concluída'";
+        
+         try(Connection conn = ConexaoBD.getConnection()) {
+
+            var preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, idProjeto);
+            var resultSet = preparedStatement.executeQuery();
+            
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+            return 0;
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+
+        return 0;
+
+    }
+
+    public List<Tarefa> buscarTarefasDoProjeto(int idProjeto) {
+        
+        List<Tarefa> tarefas = new ArrayList<>();
+        String sql = "SELECT * FROM tarefas WHERE id_projeto = ?";
+
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idProjeto);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Tarefa tarefa = new Tarefa(
+                    rs.getInt("id_tarefa"),
+                    rs.getString("titulo"),
+                    rs.getString("descricao"),
+                    rs.getString("data_fim_previsto"),
+                    StatusTarefa.valueOf(rs.getString("status")),
+                    rs.getInt("id_projeto")
+                );
+                tarefas.add(tarefa);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tarefas;
+    }
+
+    // Método para buscar as tarefas de um usuário específico em um projeto
+    // Retorna uma lista de tarefas atribuídas ao usuário no projeto especificado
+    public List<Tarefa> buscarTarefasDoUsuario (int idUsuario, int idProjeto) {
+        
+        List<Tarefa> tarefas = new ArrayList<>();
+        String sql = """
+            SELECT t.*
+            FROM tarefas t
+            INNER JOIN membros_projeto mp ON t.id_projeto = mp.id_projeto
+            WHERE mp.id_usuario = ? AND t.id_projeto = ?
+            """;
+
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Tarefa tarefa = new Tarefa(
+                    rs.getInt("id_tarefa"),
+                    rs.getString("titulo"),
+                    rs.getString("descricao"),
+                    rs.getString("data_fim_previsto"),
+                    StatusTarefa.valueOf(rs.getString("status")),
+                    rs.getInt("id_projeto"),
+                    rs.getInt("id_responsavel")
+                );
+                tarefas.add(tarefa);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tarefas;
     }
 
     private Projeto construirProjeto(ResultSet rs) throws SQLException {

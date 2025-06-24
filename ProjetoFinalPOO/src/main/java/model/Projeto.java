@@ -1,9 +1,10 @@
 package model;
 
-import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
+import DAO.ProjetoDAO;
 import DAO.UsuariosDAO;
-import util.ConexaoBD;
 
 public class Projeto {
     
@@ -13,6 +14,7 @@ public class Projeto {
     private String dataCriacao;
     private String dataFimPrevista;
     private int idLider;
+    private List<Tarefa> tarefas = new ArrayList<>(); //Composite
 
     public Projeto(int idProjeto, String nome, String descricao, String dataCriacao, String dataFimPrevista, int idLider) {
         this.idProjeto = idProjeto;
@@ -92,58 +94,12 @@ public class Projeto {
         this.idLider = lider.getIdUsuario();
     }
 
-    public int quantidadeTarefas() {
-        
-        String sql = "SELECT COUNT(*) FROM tarefas WHERE id_projeto = ?";
-        
-         try(Connection conn = ConexaoBD.getConnection()) {
-
-            var preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setInt(1, this.idProjeto);
-            var resultSet = preparedStatement.executeQuery();
-            
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-
-            return 0;
-
-        } catch (Exception e) {
-            System.out.println("Erro: " + e.getMessage());
-        }
-
-        return 0;
-
-    }
-
-    private int quantidadeTarefasConcluidas() {
-        
-        String sql = "SELECT COUNT(*) FROM tarefas WHERE id_projeto = ? AND status = 'Concluída'";
-        
-         try(Connection conn = ConexaoBD.getConnection()) {
-
-            var preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setInt(1, this.idProjeto);
-            var resultSet = preparedStatement.executeQuery();
-            
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-
-            return 0;
-
-        } catch (Exception e) {
-            System.out.println("Erro: " + e.getMessage());
-        }
-
-        return 0;
-
-    }
-
     public int porcentagemConcluida() {
         
-        int totalTarefas = quantidadeTarefas();
-        int tarefasConcluidas = quantidadeTarefasConcluidas();
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+
+        int totalTarefas = projetoDAO.quantidadeTarefas(this.idProjeto);
+        int tarefasConcluidas = projetoDAO.quantidadeTarefasConcluidas(this.idProjeto);
 
         if (totalTarefas == 0) {
             return 0; // Evita divisão por zero
@@ -151,6 +107,26 @@ public class Projeto {
 
         return (tarefasConcluidas * 100) / totalTarefas;
 
+    }
+    
+    public void adicionarTarefa(Tarefa tarefa) {
+        tarefas.add(tarefa);
+    }
+
+    public void removerTarefa(Tarefa tarefa) {
+        tarefas.remove(tarefa);
+    }
+
+    public void carregarTarefas(ProjetoDAO projetoDAO) {
+        this.tarefas = projetoDAO.buscarTarefasDoProjeto(this.idProjeto);
+    }
+
+    public void carregarTarefasDoUsuario(int idUsuario, ProjetoDAO projetoDAO) {
+        this.tarefas = projetoDAO.buscarTarefasDoUsuario(idUsuario, this.idProjeto);
+    }
+
+    public List<Tarefa> getTarefas() {
+        return tarefas;
     }
 
 }

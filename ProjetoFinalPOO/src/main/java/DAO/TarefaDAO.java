@@ -17,7 +17,7 @@ public class TarefaDAO {
     
     public void criarTarefa(Tarefa tarefa) {
         
-        String sql = "INSERT INTO Tarefa (titulo, descricao, dataFimPrevisto, status, id_projeto) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Tarefa (titulo, descricao, dataFimPrevisto, status, id_projeto, id_responsavel) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -27,6 +27,7 @@ public class TarefaDAO {
             preparedStatement.setString(3, tarefa.getDataFimPrevisto());
             preparedStatement.setString(4, tarefa.getStatus().toString());
             preparedStatement.setInt(5, tarefa.getIdProjeto());
+            preparedStatement.setInt(6, tarefa.getIdUsuarioResponsavel());
             
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -185,7 +186,7 @@ public class TarefaDAO {
 
     public List<Tarefa> buscarTarefasPorResponsavel(int idResponsavel) {
         
-        String sql = "SELECT * FROM Tarefa WHERE idResponsavel = ?";
+        String sql = "SELECT * FROM Tarefa WHERE id_responsavel = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
