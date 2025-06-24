@@ -6,6 +6,7 @@ package util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -32,10 +33,18 @@ public class ConexaoBD {
             
         }
         
+        //Tentando ativar as chaves estrangeiras
         try {
             
             Statement stmt = conn.createStatement();
             stmt.execute("PRAGMA foreign_keys = ON;");
+            
+            ResultSet rs = stmt.executeQuery("PRAGMA foreign_keys;");
+            if (rs.next()) {
+                boolean fkAtivado = rs.getInt(1) == 1;
+                System.out.println("\nChaves estrangeiras estao " + (fkAtivado ? "ativadas" : "desativadas"));
+            }
+            
             
         }catch (SQLException sqlEx) {
             System.out.println("Erro ao ativar foreign keys: " + sqlEx.getMessage());

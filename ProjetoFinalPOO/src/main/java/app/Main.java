@@ -39,11 +39,6 @@ public class Main {
         ProjetoDAO projetoDAO = new ProjetoDAO();
         MembrosProjetoDAO membrosProjetoDAO = new MembrosProjetoDAO();
         
-        Tarefa tarefa = new Tarefa("Tarefa Teste", "Tarefa para testes", "25/06/2025", StatusTarefa.ATRASADA, 1);
-    
-        TarefaDAO tarefaDAO = new TarefaDAO();
-      
-    
         //Valores para testes
 
 

@@ -42,6 +42,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         //Definindo o card padrão
         this.cardLayout.show(painelPrincipal, "Tarefas");
+        this.painelTarefas.carregarDados();
         
         //Corrigindo o tamanho do painel lateral
         painelLateral.setMinimumSize(new Dimension(150, painelLateral.getHeight()));
@@ -221,6 +222,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         System.out.println("Chamando a tela de Tarefas");
         
         this.cardLayout.show(painelPrincipal, "Tarefas");
+        this.painelTarefas.carregarDados();
         
         painelPrincipal.revalidate();
         painelPrincipal.repaint();

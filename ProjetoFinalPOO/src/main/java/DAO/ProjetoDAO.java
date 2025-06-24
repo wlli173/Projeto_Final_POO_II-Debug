@@ -30,6 +30,7 @@ public class ProjetoDAO {
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
+            System.out.println("DAO.ProjetoDAO.inserirProjeto()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -51,6 +52,7 @@ public class ProjetoDAO {
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
+            System.out.println("DAO.ProjetoDAO.atualizarProjeto()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -68,6 +70,7 @@ public class ProjetoDAO {
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
+            System.out.println("DAO.ProjetoDAO.excluirProjeto()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -93,6 +96,7 @@ public class ProjetoDAO {
             }
 
         } catch (SQLException e) {
+            System.out.println("DAO.ProjetoDAO.buscarProjetoPorId()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -117,6 +121,7 @@ public class ProjetoDAO {
             }
 
         } catch (SQLException e) {
+            System.out.println("DAO.ProjetoDAO.buscarProjetoPorNome()");
             System.out.println("Erro: " + e.getMessage());
         }
         
@@ -139,6 +144,7 @@ public class ProjetoDAO {
             }
 
         } catch (SQLException e) {
+            System.out.println("DAO.ProjetoDAO.listarProjetos()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -163,7 +169,8 @@ public class ProjetoDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("DAO.ProjetoDAO.buscarProjetosDoLider()");
+            System.out.println("Erro: " + e.getMessage());
         }
 
         return projetos;
@@ -192,7 +199,8 @@ public class ProjetoDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("DAO.ProjetoDAO.buscarProjetosDoMembro()");
+            System.out.println("Erro: " + e.getMessage());
         }
 
         return projetos;
@@ -215,6 +223,7 @@ public class ProjetoDAO {
             return 0;
 
         } catch (Exception e) {
+            System.out.println("DAO.ProjetoDAO.quantidadeTarefas()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -243,6 +252,7 @@ public class ProjetoDAO {
             return 0;
 
         } catch (Exception e) {
+            System.out.println("DAO.ProjetoDAO.quantidadeTarefasConcluidas()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -268,13 +278,15 @@ public class ProjetoDAO {
                     rs.getString("descricao"),
                     rs.getString("data_fim_previsto"),
                     StatusTarefa.valueOf(rs.getString("status")),
-                    rs.getInt("id_projeto")
+                    rs.getInt("id_projeto"),
+                    rs.getInt("id_responsavel")
                 );
                 tarefas.add(tarefa);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("DAO.ProjetoDAO.buscarTarefasDoProjeto()");
+            System.out.println("Erro: " + e.getMessage());
         }
 
         return tarefas;
@@ -312,7 +324,8 @@ public class ProjetoDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("DAO.ProjetoDAO.buscarTarefasDoUsuario()");
+            System.out.println("Erro: " + e.getMessage());
         }
 
         return tarefas;

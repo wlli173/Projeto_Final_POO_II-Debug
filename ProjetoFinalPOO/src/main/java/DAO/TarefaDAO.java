@@ -17,7 +17,7 @@ public class TarefaDAO {
     
     public void criarTarefa(Tarefa tarefa) {
         
-        String sql = "INSERT INTO Tarefa (titulo, descricao, dataFimPrevisto, status, id_projeto, id_responsavel) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tarefas (titulo, descricao, data_fim_prevista, status, id_projeto, id_responsavel) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -25,12 +25,13 @@ public class TarefaDAO {
             preparedStatement.setString(1, tarefa.getTitulo());
             preparedStatement.setString(2, tarefa.getDescricao());
             preparedStatement.setString(3, tarefa.getDataFimPrevisto());
-            preparedStatement.setString(4, tarefa.getStatus().toString());
+            preparedStatement.setString(4, tarefa.getStatus().getDescricao());
             preparedStatement.setInt(5, tarefa.getIdProjeto());
             preparedStatement.setInt(6, tarefa.getIdUsuarioResponsavel());
             
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("DAO.TarefaDAO.criarTarefa()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -38,7 +39,7 @@ public class TarefaDAO {
 
     public void atualizarTarefa(Tarefa tarefa) {
         
-        String sql = "UPDATE Tarefa SET titulo = ?, descricao = ?, dataFimPrevisto = ?, status = ? WHERE idTarefa = ?";
+        String sql = "UPDATE tarefas SET titulo = ?, descricao = ?, data_fim_prevista = ?, status = ? WHERE id_tarefa = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -51,6 +52,7 @@ public class TarefaDAO {
             
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("DAO.TarefaDAO.atualizarTarefa()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -58,7 +60,7 @@ public class TarefaDAO {
 
     public void excluirTarefa(int idTarefa) {
         
-        String sql = "DELETE FROM Tarefa WHERE idTarefa = ?";
+        String sql = "DELETE FROM tarefas WHERE id_tarefa = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -66,6 +68,7 @@ public class TarefaDAO {
             preparedStatement.setInt(1, idTarefa);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("DAO.TarefaDAO.excluirTarefa()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -77,7 +80,7 @@ public class TarefaDAO {
 
     public void concluirTarefa(int idTarefa) {
         
-        String sql = "UPDATE Tarefa SET status = 'CONCLUIDA' WHERE idTarefa = ?";
+        String sql = "UPDATE tarefas SET status = 'CONCLUIDA' WHERE id_tarefa = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -85,6 +88,7 @@ public class TarefaDAO {
             preparedStatement.setInt(1, idTarefa);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("DAO.TarefaDAO.concluirTarefa()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -96,7 +100,7 @@ public class TarefaDAO {
 
     public void reabrirTarefa(int idTarefa) {
         
-        String sql = "UPDATE Tarefa SET status = 'PENDENTE' WHERE idTarefa = ?";
+        String sql = "UPDATE tarefas SET status = 'Em Andamento' WHERE id_tarefa = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -104,6 +108,7 @@ public class TarefaDAO {
             preparedStatement.setInt(1, idTarefa);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("DAO.TarefaDAO.reabrirTarefa()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -115,7 +120,7 @@ public class TarefaDAO {
 
     public List<Tarefa> listarTarefasPorProjeto(int idProjeto) {
         
-        String sql = "SELECT * FROM Tarefa WHERE id_projeto = ?";
+        String sql = "SELECT * FROM tarefas WHERE id_projeto = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -126,20 +131,22 @@ public class TarefaDAO {
             List<Tarefa> tarefas = new ArrayList<>();
 
             while (resultSet.next()) {
-                int idTarefa = resultSet.getInt("idTarefa");
+                int idTarefa = resultSet.getInt("id_tarefa");
                 String titulo = resultSet.getString("titulo");
                 String descricao = resultSet.getString("descricao");
                 String dataFimPrevisto = resultSet.getString("dataFimPrevisto");
                 String statusStr = resultSet.getString("status");
                 StatusTarefa status = StatusTarefa.valueOf(statusStr);
+                int idResponsavel = resultSet.getInt("id_responsavel");
                 
-                Tarefa tarefa = new Tarefa(idTarefa, titulo, descricao, dataFimPrevisto, status, idProjeto);
+                Tarefa tarefa = new Tarefa(idTarefa, titulo, descricao, dataFimPrevisto, status, idProjeto,idResponsavel);
                 tarefas.add(tarefa);
             }
 
             return tarefas;
             
         } catch (SQLException e) {
+            System.out.println("DAO.TarefaDAO.listarTarefasPorProjeto()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -153,7 +160,7 @@ public class TarefaDAO {
 
     public Tarefa buscarTarefaPorId(int idTarefa) {
         
-        String sql = "SELECT * FROM Tarefa WHERE idTarefa = ?";
+        String sql = "SELECT * FROM tarefas WHERE id_tarefa = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -168,11 +175,13 @@ public class TarefaDAO {
                 String statusStr = resultSet.getString("status");
                 StatusTarefa status = StatusTarefa.valueOf(statusStr);
                 int idProjeto = resultSet.getInt("id_projeto");
+                int idResponsavel = resultSet.getInt("id_responsavel");
                 
-                return new Tarefa(idTarefa, titulo, descricao, dataFimPrevisto, status, idProjeto);
+                return new Tarefa(idTarefa, titulo, descricao, dataFimPrevisto, status, idProjeto, idResponsavel);
             }
             
         } catch (SQLException e) {
+            System.out.println("DAO.TarefaDAO.buscarTarefaPorId()");
             System.out.println("Erro: " + e.getMessage());
         }
 
@@ -186,7 +195,7 @@ public class TarefaDAO {
 
     public List<Tarefa> buscarTarefasPorResponsavel(int idResponsavel) {
         
-        String sql = "SELECT * FROM Tarefa WHERE id_responsavel = ?";
+        String sql = "SELECT * FROM tarefas WHERE id_responsavel = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -205,13 +214,14 @@ public class TarefaDAO {
                 StatusTarefa status = StatusTarefa.valueOf(statusStr);
                 int idProjeto = resultSet.getInt("id_projeto");
                 
-                Tarefa tarefa = new Tarefa(idTarefa, titulo, descricao, dataFimPrevisto, status, idProjeto);
+                Tarefa tarefa = new Tarefa(idTarefa, titulo, descricao, dataFimPrevisto, status, idProjeto, idResponsavel);
                 tarefas.add(tarefa);
             }
 
             return tarefas;
             
         } catch (SQLException e) {
+            System.out.println("DAO.TarefaDAO.buscarTarefasPorResponsavel()");
             System.out.println("Erro: " + e.getMessage());
         }
 

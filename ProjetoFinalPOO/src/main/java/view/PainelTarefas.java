@@ -27,6 +27,13 @@ public class PainelTarefas extends javax.swing.JPanel {
         
         this.painelGrid.setLayout(new GridLayout(0,1,10,10));
         
+    }
+
+    public void carregarDados(){
+        
+        System.out.println("view.PainelTarefas.carregarDados()");
+        System.out.println("Tentando carregar dados das tarefas");
+        
         painelGrid.removeAll();
         
         List<Projeto> projetos;
@@ -36,8 +43,6 @@ public class PainelTarefas extends javax.swing.JPanel {
         ProjetoDAO projetoDAO = new ProjetoDAO();
         
         projetos = projetoDAO.buscarProjetosDoMembro(idUsuarioLogado);
-        
-        //tarefas = projetoDAO.buscarTarefasDoUsuario(idUsuarioLogado);
         
         for(Projeto projeto : projetos){
             
@@ -58,13 +63,8 @@ public class PainelTarefas extends javax.swing.JPanel {
             
         }
         
-    }
-
-    public void carregarDados(){
-        
-        System.out.println("Tentando carregar dados das tarefas");
-        
-        
+        painelGrid.revalidate();
+        painelGrid.repaint();
         
     }
     

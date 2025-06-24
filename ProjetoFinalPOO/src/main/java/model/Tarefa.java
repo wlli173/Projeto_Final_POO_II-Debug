@@ -17,6 +17,7 @@ public class Tarefa {
         this.dataFimPrevisto = dataFimPrevisto;
         this.status = status;
         this.idProjeto = idProjeto;
+        this.idUsuarioResponsavel = idUsuarioResponsavel;
     }
 
     public Tarefa(String titulo, String descricao, String dataFimPrevisto, StatusTarefa status, int idProjeto, int idUsuarioResponsavel) {
@@ -25,6 +26,7 @@ public class Tarefa {
         this.dataFimPrevisto = dataFimPrevisto;
         this.status = status;
         this.idProjeto = idProjeto;
+        this.idUsuarioResponsavel = idUsuarioResponsavel;
     }
 
     public int getIdTarefa() {

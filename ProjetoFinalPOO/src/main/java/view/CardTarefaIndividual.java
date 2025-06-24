@@ -23,8 +23,7 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
         
         this.lblNomeTarefa.setText(tarefa.getTitulo());
         this.lblDescricaoTarefa.setText(tarefa.getDescricao());
-        
-        //this.jComboBox1.setModel();
+        this.lblStatusTarefa.setText(tarefa.getStatus().getDescricao());
         
     }
     
@@ -39,8 +38,8 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
 
         lblNomeTarefa = new javax.swing.JLabel();
         lblDescricaoTarefa = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
+        lblStatusTarefa = new javax.swing.JLabel();
 
         lblNomeTarefa.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblNomeTarefa.setText("jLabel1");
@@ -48,10 +47,11 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
         lblDescricaoTarefa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDescricaoTarefa.setText("jLabel1");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Em Progresso", "Concluída" }));
-
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Status:");
+
+        lblStatusTarefa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblStatusTarefa.setText("jLabel2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -59,16 +59,16 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(lblNomeTarefa)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 325, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblDescricaoTarefa)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblDescricaoTarefa)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblStatusTarefa)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 241, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -76,19 +76,19 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
                 .addComponent(lblNomeTarefa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDescricaoTarefa)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addContainerGap())
+                    .addComponent(jLabel1)
+                    .addComponent(lblStatusTarefa))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblDescricaoTarefa;
     private javax.swing.JLabel lblNomeTarefa;
+    private javax.swing.JLabel lblStatusTarefa;
     // End of variables declaration//GEN-END:variables
 }
