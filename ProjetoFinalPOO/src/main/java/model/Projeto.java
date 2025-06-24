@@ -105,7 +105,7 @@ public class Projeto {
             return 0; // Evita divisão por zero
         }
 
-        return (tarefasConcluidas * 100) / totalTarefas;
+        return (int)(tarefasConcluidas * 100) / totalTarefas;
 
     }
     
@@ -117,6 +117,10 @@ public class Projeto {
         tarefas.remove(tarefa);
     }
 
+    /**
+     * Carrega no objeto todas as tarefas relacionadas ao projeto dado
+     * @param projetoDAO objeto do projeto a receber suas tarefas
+     */
     public void carregarTarefas(ProjetoDAO projetoDAO) {
         this.tarefas = projetoDAO.buscarTarefasDoProjeto(this.idProjeto);
     }
@@ -125,6 +129,10 @@ public class Projeto {
         this.tarefas = projetoDAO.buscarTarefasDoUsuario(idUsuario, this.idProjeto);
     }
 
+    /**
+     *  Método para adquirir as tarefas do projeto
+     * @return Retorna um ArrayList com as tarefas do projeto
+     */
     public List<Tarefa> getTarefas() {
         return tarefas;
     }

@@ -4,19 +4,41 @@
  */
 package view;
 
+import controle.NavegacaoMediator;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JOptionPane;
 import model.Projeto;
 
 /**
  *
  * @author Willighan
  */
+
 public class CardProjetos extends javax.swing.JPanel {
 
+    private Projeto projeto;
+    private NavegacaoMediator mediator;
     /**
      * Creates new form CardProjetos
      */
-    public CardProjetos() {
+    public CardProjetos(Projeto projeto, NavegacaoMediator mediator) {
+        
+        this.projeto = projeto;
+        this.mediator = mediator;
+        
         initComponents();
+        
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    //JOptionPane.showMessageDialog(null, projeto.getIdProjeto());
+                    mediator.abrirVisualizacaoProjeto(projeto);
+                }
+            }
+        });
+        
     }
     
     public void setDadosProjeto(Projeto projeto){
@@ -25,6 +47,7 @@ public class CardProjetos extends javax.swing.JPanel {
         this.lblNomeLider.setText(projeto.getLider().getNome());
         this.lblDescricao.setText(projeto.getDescricao());
         this.barraProgresso.setValue(projeto.porcentagemConcluida());
+        
                 
     }
 
@@ -41,6 +64,7 @@ public class CardProjetos extends javax.swing.JPanel {
         lblNomeLider = new javax.swing.JLabel();
         lblDescricao = new javax.swing.JLabel();
         barraProgresso = new javax.swing.JProgressBar();
+        jLabel1 = new javax.swing.JLabel();
 
         lblNomeProjeto.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblNomeProjeto.setText("jLabel1");
@@ -49,6 +73,9 @@ public class CardProjetos extends javax.swing.JPanel {
         lblNomeLider.setText("jLabel1");
 
         lblDescricao.setText("jLabel1");
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel1.setText("Progresso:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -66,8 +93,14 @@ public class CardProjetos extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(29, 29, 29)
                                 .addComponent(lblDescricao)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(barraProgresso, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE))
+                        .addGap(0, 368, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(barraProgresso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -79,15 +112,18 @@ public class CardProjetos extends javax.swing.JPanel {
                 .addComponent(lblNomeLider)
                 .addGap(18, 18, 18)
                 .addComponent(lblDescricao)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(barraProgresso, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barraProgresso;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblDescricao;
     private javax.swing.JLabel lblNomeLider;
     private javax.swing.JLabel lblNomeProjeto;

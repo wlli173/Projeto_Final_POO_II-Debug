@@ -276,7 +276,7 @@ public class ProjetoDAO {
                     rs.getInt("id_tarefa"),
                     rs.getString("titulo"),
                     rs.getString("descricao"),
-                    rs.getString("data_fim_previsto"),
+                    rs.getString("data_fim_prevista"),
                     StatusTarefa.valueOf(rs.getString("status")),
                     rs.getInt("id_projeto"),
                     rs.getInt("id_responsavel")
@@ -308,6 +308,7 @@ public class ProjetoDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, idUsuario);
+            stmt.setInt(2, idProjeto);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -315,8 +316,8 @@ public class ProjetoDAO {
                     rs.getInt("id_tarefa"),
                     rs.getString("titulo"),
                     rs.getString("descricao"),
-                    rs.getString("data_fim_previsto"),
-                    StatusTarefa.valueOf(rs.getString("status")),
+                    rs.getString("data_fim_prevista"),
+                    StatusTarefa.fromDescricao(rs.getString("status")),
                     rs.getInt("id_projeto"),
                     rs.getInt("id_responsavel")
                 );

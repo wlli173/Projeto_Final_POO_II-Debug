@@ -4,6 +4,7 @@
  */
 package view;
 
+import java.awt.GridLayout;
 import model.Projeto;
 
 /**
@@ -17,6 +18,9 @@ public class CardTarefasProjeto extends javax.swing.JPanel {
      */
     public CardTarefasProjeto() {
         initComponents();
+        
+        this.painelGrid.setLayout(new GridLayout(0,1,10,10));
+        
     }
     
     public void setDados(Projeto projeto){
@@ -24,6 +28,15 @@ public class CardTarefasProjeto extends javax.swing.JPanel {
         this.lblNomeProjeto.setText(projeto.getNome());
         this.lblNomeLider.setText(projeto.getLider().getNome());
         
+    }
+    
+    public void atualizar(){
+        this.painelGrid.revalidate();
+        this.painelGrid.repaint();
+    }
+    
+    public void adicionarCardTarefa(CardTarefaIndividual cardTarefa) {
+        this.painelGrid.add(cardTarefa);
     }
 
     /**

@@ -37,7 +37,6 @@ public class PainelTarefas extends javax.swing.JPanel {
         painelGrid.removeAll();
         
         List<Projeto> projetos;
-        List<Tarefa> tarefas;
         
         int idUsuarioLogado = SessaoUsuario.getUsuarioLogado().getIdUsuario();
         ProjetoDAO projetoDAO = new ProjetoDAO();
@@ -55,9 +54,13 @@ public class PainelTarefas extends javax.swing.JPanel {
                 
                 CardTarefaIndividual cardTarefaIndividual = new CardTarefaIndividual();
                 cardTarefaIndividual.setDados(tarefa);
-                cardTarefasPorProjeto.add(cardTarefaIndividual);
+                cardTarefasPorProjeto.adicionarCardTarefa(cardTarefaIndividual);
+                
+               
                 
             }
+            
+             cardTarefasPorProjeto.atualizar();
             
             this.painelGrid.add(cardTarefasPorProjeto);
             

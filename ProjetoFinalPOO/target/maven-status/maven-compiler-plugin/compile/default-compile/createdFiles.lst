@@ -1,10 +1,13 @@
 view\TelaLogin$3.class
+controle\NavegacaoMediator.class
 view\TelaPrincipal$1.class
+view\CardProjetos$1.class
 view\PainelProjetos$1.class
 view\TelaCadastroUsuario$3.class
 view\TelaPrincipal$3.class
 view\TelaPrincipal.class
 view\TelaPrincipal$2.class
+view\PainelVisualizarProjeto.class
 view\CardTarefasProjeto.class
 view\CardProjetos.class
 view\PainelProjetos$2.class

@@ -15,5 +15,16 @@ public enum StatusTarefa {
     public String getDescricao() {
         return descricao;
     }
+    
+    public static StatusTarefa fromDescricao(String descricao) {
+        
+        for (StatusTarefa status : StatusTarefa.values()) {
+            if (status.getDescricao().equalsIgnoreCase(descricao.trim())) {
+                return status;
+            }
+        }
+        
+        throw new IllegalArgumentException("Status inválido: " + descricao);
+    }
 
 }

@@ -4,13 +4,13 @@
  */
 package view;
 
+import controle.NavegacaoMediator;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -24,11 +24,17 @@ public class TelaPrincipal extends javax.swing.JFrame {
     
     // Gerenciador de Layout
     private CardLayout cardLayout;
-    private PainelTarefas painelTarefas = new PainelTarefas();
-    private PainelProjetos painelProjetos = new PainelProjetos();
+    private NavegacaoMediator mediator;
+    private PainelTarefas painelTarefas;
+    private PainelProjetos painelProjetos;
     
     public TelaPrincipal() {
         initComponents();
+        
+        this.mediator = new NavegacaoMediator(this);
+        
+        this.painelTarefas = new PainelTarefas();
+        this.painelProjetos = new PainelProjetos(this.mediator);
         
         // Layout manager/Gerenciador de "sub-telas" para a troca entre os Jpanels
         cardLayout = new CardLayout();
@@ -93,6 +99,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
     }
 
+    public void mostrarPainel(String nomePainel){
+        cardLayout.show(painelPrincipal, nomePainel);
+    }
+    
+    public void adicionarEExibirPainel(String nomePainel, JPanel painel) {
+        painelPrincipal.add(painel, nomePainel);
+        cardLayout.show(painelPrincipal, nomePainel);
+    }
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

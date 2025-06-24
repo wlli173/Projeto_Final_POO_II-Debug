@@ -5,6 +5,7 @@
 package view;
 
 import DAO.ProjetoDAO;
+import controle.NavegacaoMediator;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,13 @@ public class PainelProjetos extends javax.swing.JPanel {
     /**
      * Creates new form PainelProjetos
      */
-    public PainelProjetos() {
+    
+    private NavegacaoMediator mediator;
+    
+    public PainelProjetos(NavegacaoMediator mediator) {
         initComponents();
+        
+        this.mediator = mediator;
         
         this.painelGrid.setLayout(new GridLayout(0,2,10,10));
         
@@ -57,7 +63,7 @@ public class PainelProjetos extends javax.swing.JPanel {
         
         for (Projeto projeto : projetos) {
             System.out.println(projeto.toString());
-            CardProjetos card = new CardProjetos();
+            CardProjetos card = new CardProjetos(projeto, mediator);
             card.setDadosProjeto(projeto);
             painelGrid.add(card);
         }
