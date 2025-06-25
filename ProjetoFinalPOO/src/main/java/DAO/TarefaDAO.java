@@ -80,7 +80,7 @@ public class TarefaDAO {
 
     public void concluirTarefa(int idTarefa) {
         
-        String sql = "UPDATE tarefas SET status = 'CONCLUIDA' WHERE id_tarefa = ?";
+        String sql = "UPDATE tarefas SET status = 'Concluída' WHERE id_tarefa = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -100,7 +100,7 @@ public class TarefaDAO {
 
     public void reabrirTarefa(int idTarefa) {
         
-        String sql = "UPDATE tarefas SET status = 'Em Andamento' WHERE id_tarefa = ?";
+        String sql = "UPDATE tarefas SET status = 'Em Progresso' WHERE id_tarefa = ?";
 
         try (Connection connection = ConexaoBD.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -134,7 +134,7 @@ public class TarefaDAO {
                 int idTarefa = resultSet.getInt("id_tarefa");
                 String titulo = resultSet.getString("titulo");
                 String descricao = resultSet.getString("descricao");
-                String dataFimPrevisto = resultSet.getString("dataFimPrevisto");
+                String dataFimPrevisto = resultSet.getString("data_fim_prevista");
                 String statusStr = resultSet.getString("status");
                 StatusTarefa status = StatusTarefa.valueOf(statusStr);
                 int idResponsavel = resultSet.getInt("id_responsavel");
@@ -171,7 +171,7 @@ public class TarefaDAO {
             if (resultSet.next()) {
                 String titulo = resultSet.getString("titulo");
                 String descricao = resultSet.getString("descricao");
-                String dataFimPrevisto = resultSet.getString("dataFimPrevisto");
+                String dataFimPrevisto = resultSet.getString("data_fim_previsto");
                 String statusStr = resultSet.getString("status");
                 StatusTarefa status = StatusTarefa.valueOf(statusStr);
                 int idProjeto = resultSet.getInt("id_projeto");
@@ -189,6 +189,10 @@ public class TarefaDAO {
 
     }
 
+    public Tarefa buscarTarefa(Tarefa tarefa){
+        return buscarTarefaPorId(tarefa.getIdTarefa());
+    }
+    
     public Tarefa buscarTarefaPorId(Tarefa tarefa) {
         return buscarTarefaPorId(tarefa.getIdTarefa());
     }
@@ -209,7 +213,7 @@ public class TarefaDAO {
                 int idTarefa = resultSet.getInt("idTarefa");
                 String titulo = resultSet.getString("titulo");
                 String descricao = resultSet.getString("descricao");
-                String dataFimPrevisto = resultSet.getString("dataFimPrevisto");
+                String dataFimPrevisto = resultSet.getString("data_fim_previsto");
                 String statusStr = resultSet.getString("status");
                 StatusTarefa status = StatusTarefa.valueOf(statusStr);
                 int idProjeto = resultSet.getInt("id_projeto");

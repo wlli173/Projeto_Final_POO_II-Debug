@@ -5,6 +5,7 @@
 package view;
 
 import DAO.ComentarioDAO;
+import DAO.TarefaDAO;
 import java.awt.GridLayout;
 import model.Comentario;
 import model.Tarefa;
@@ -29,6 +30,10 @@ public class PainelVisualizarTarefa extends javax.swing.JPanel {
         
         this.painelGrid.setLayout(new GridLayout(0,1,10,10));
         
+        if(SessaoUsuario.getUsuarioLogado().getIdUsuario() != tarefa.getIdUsuarioResponsavel()){
+            this.cmbxStatusTarefa.setVisible(false);
+        }
+        
     }
     
     public void setDados(){
@@ -37,6 +42,15 @@ public class PainelVisualizarTarefa extends javax.swing.JPanel {
         this.lblNomeResponsável.setText(tarefa.getUsuarioResponsavel().getNome());
         this.lblDescricaoTarefa.setText(tarefa.getDescricao());
         this.lblStatusTarefa.setText(tarefa.getStatus().getDescricao());
+        
+    }
+    
+    public void recaregarDados(){
+        
+        TarefaDAO tarefaDAO = new TarefaDAO();
+        this.tarefa = tarefaDAO.buscarTarefa(tarefa);
+        
+        setDados();
         
     }
     
@@ -77,6 +91,7 @@ public class PainelVisualizarTarefa extends javax.swing.JPanel {
         txtfCampoComentario = new javax.swing.JTextField();
         btnComentar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        cmbxStatusTarefa = new javax.swing.JComboBox<>();
 
         lblNomeTarefa.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblNomeTarefa.setText("jLabel1");
@@ -115,6 +130,13 @@ public class PainelVisualizarTarefa extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Comentários:");
 
+        cmbxStatusTarefa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Em Progresso", "Concluída" }));
+        cmbxStatusTarefa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbxStatusTarefaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -132,7 +154,9 @@ public class PainelVisualizarTarefa extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblStatusTarefa))
+                                .addComponent(lblStatusTarefa)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbxStatusTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblDescricaoTarefa)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtfCampoComentario, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -154,7 +178,8 @@ public class PainelVisualizarTarefa extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(lblStatusTarefa))
+                    .addComponent(lblStatusTarefa)
+                    .addComponent(cmbxStatusTarefa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -180,9 +205,60 @@ public class PainelVisualizarTarefa extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnComentarActionPerformed
 
+    private void cmbxStatusTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbxStatusTarefaActionPerformed
+        
+        System.out.println("view.PainelVisualizarTarefa.cmbxStatusTarefaActionPerformed()");
+        
+        TarefaDAO tarefaDAO = new TarefaDAO();
+        String statusAtual = tarefa.getStatus().getDescricao();
+        int indiceSelecionado = cmbxStatusTarefa.getSelectedIndex();
+        
+        // Verificações de segurança
+        if (tarefa == null || tarefa.getStatus() == null || tarefa.getStatus().getDescricao() == null) {
+            System.err.println("Tarefa ou status da tarefa está nulo.");
+            return;
+        }
+        
+        // índice 0 = "Em Progresso", índice 1 = "Concluída"
+        switch (statusAtual) {
+        case "Em Progresso":
+            if (indiceSelecionado == 1) {
+                tarefaDAO.concluirTarefa(tarefa);
+                System.out.println("Tarefa concluída.");
+            }
+            break;
+
+        case "Concluída":
+            if (indiceSelecionado == 0) {
+                tarefaDAO.reabrirTarefa(tarefa);
+                System.out.println("Tarefa reaberta.");
+            }
+            break;
+            
+        case "Atrasada":
+            if (indiceSelecionado == 1) {
+                tarefaDAO.concluirTarefa(tarefa);
+                System.out.println("Tarefa concluída.");
+            }
+            break;
+
+        default:
+            System.out.println("Status atual não reconhecido: " + statusAtual);
+        }
+        
+        //TODO ajustar o recarregamento do status
+        
+        recaregarDados();
+        
+        this.revalidate();
+        this.repaint();
+        
+    }//GEN-LAST:event_cmbxStatusTarefaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnComentar;
+    private javax.swing.JComboBox<String> cmbxStatusTarefa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

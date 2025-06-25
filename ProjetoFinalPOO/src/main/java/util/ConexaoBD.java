@@ -17,6 +17,9 @@ import java.sql.Statement;
 public class ConexaoBD {
     
     private static final String URL = "jdbc:sqlite:TaskJDB.db";
+
+    private ConexaoBD() {
+    }
     
     public static Connection getConnection(){
         
