@@ -1,5 +1,7 @@
 package model;
 
+import DAO.UsuariosDAO;
+
 public class Tarefa {
     
     private int idTarefa;
@@ -39,6 +41,11 @@ public class Tarefa {
 
     public int getIdUsuarioResponsavel() {
         return idUsuarioResponsavel;
+    }
+    
+    public Usuario getUsuarioResponsavel(){
+        UsuariosDAO usuariosDAO = new UsuariosDAO();
+        return usuariosDAO.buscarUsuarioPorId(getIdUsuarioResponsavel());
     }
 
     public String getTitulo() {

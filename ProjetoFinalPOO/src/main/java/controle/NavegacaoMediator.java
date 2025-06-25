@@ -5,8 +5,12 @@
 package controle;
 
 import DAO.ProjetoDAO;
+import DAO.TarefaDAO;
 import model.Projeto;
+import model.Tarefa;
+import view.PainelCriarProjeto;
 import view.PainelVisualizarProjeto;
+import view.PainelVisualizarTarefa;
 import view.TelaPrincipal;
 
 /**
@@ -34,5 +38,34 @@ public class NavegacaoMediator {
         telaPrincipal.adicionarEExibirPainel(nomePainel, painel);
         
     }
+
+    public void abrirVisualizacaoTarefa(Tarefa tarefa) {
+        
+        TarefaDAO tarefaDAO = new TarefaDAO();
+        
+        PainelVisualizarTarefa painelVisualizarTarefa = new PainelVisualizarTarefa(tarefa);
+        painelVisualizarTarefa.setDados();
+        painelVisualizarTarefa.carregarComentarios();
+        
+        String nomePainel = "VisualizacaoTarefa_"+tarefa.getIdTarefa();
+        
+        telaPrincipal.adicionarEExibirPainel(nomePainel, painelVisualizarTarefa);
+        
+    }
+
+    public void abrirCriacaoProjeto() {
+        
+        PainelCriarProjeto painelCriarProjeto = new PainelCriarProjeto(this);
+        
+        String nomePainel = "CriacaoProjeto";
+        
+        telaPrincipal.adicionarEExibirPainel(nomePainel, painelCriarProjeto);
+        
+    }
+    
+    public TelaPrincipal getTelaPrincipal(){
+        return telaPrincipal;
+    }
+            
     
 }

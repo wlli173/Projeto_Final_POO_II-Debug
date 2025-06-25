@@ -4,10 +4,14 @@
  */
 package view;
 
+import DAO.MembrosProjetoDAO;
 import controle.NavegacaoMediator;
 import java.awt.GridLayout;
+import java.util.List;
 import model.Projeto;
 import model.Tarefa;
+import model.Usuario;
+import util.SessaoUsuario;
 
 /**
  *
@@ -20,11 +24,19 @@ public class PainelVisualizarProjeto extends javax.swing.JPanel {
      */
     
     private Projeto projeto;
+    private NavegacaoMediator mediator;
     
     public PainelVisualizarProjeto(Projeto projeto, NavegacaoMediator mediator) {
         initComponents();
         
+        this.mediator = mediator;
         this.painelGrid.setLayout(new GridLayout(0,1,10,10));
+        
+        // Se Usuario é o líder ele pode editar, caso contrario não
+        // TODO adicionar a lógica para edição
+        if(SessaoUsuario.getUsuarioLogado().getIdUsuario() != projeto.getIdLider()){
+            this.btnEditarProjeto.setVisible(false);
+        }
         
     }
     
@@ -35,13 +47,25 @@ public class PainelVisualizarProjeto extends javax.swing.JPanel {
         this.lblDescricao.setText(projeto.getDescricao());
         this.jProgressBar1.setValue(projeto.porcentagemConcluida());
         
+        String nomeMembrosProjeto = "";
+        
+        MembrosProjetoDAO membrosProjetoDAO = new MembrosProjetoDAO();
+        
+        List<Usuario> usuariosMembros = membrosProjetoDAO.listarMembros(projeto.getIdProjeto());
+        
+        for(Usuario usuario : usuariosMembros){
+            nomeMembrosProjeto = nomeMembrosProjeto + usuario.getNome()+ ", ";
+        }
+        
+        this.lblNomeMembrosProjeto.setText(nomeMembrosProjeto);
+        
         if(projeto.getTarefas().isEmpty()){
             System.err.println("Tarefas do projeto: "+projeto.getNome()+ "vazio");
         }
         
         for(Tarefa tarefa : projeto.getTarefas()){
          
-            CardTarefaIndividual cardTarefaIndividual = new CardTarefaIndividual();
+            CardTarefaIndividual cardTarefaIndividual = new CardTarefaIndividual(tarefa, mediator);
             cardTarefaIndividual.setDados(tarefa);
             
             painelGrid.add(cardTarefaIndividual);
@@ -70,6 +94,9 @@ public class PainelVisualizarProjeto extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         painelGrid = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        lblNomeMembrosProjeto = new javax.swing.JLabel();
+        btnEditarProjeto = new javax.swing.JButton();
 
         lblNomeProjeto.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblNomeProjeto.setText("jLabel1");
@@ -93,31 +120,49 @@ public class PainelVisualizarProjeto extends javax.swing.JPanel {
         );
         painelGridLayout.setVerticalGroup(
             painelGridLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 104, Short.MAX_VALUE)
+            .addGap(0, 225, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(painelGrid);
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Membros:");
+
+        lblNomeMembrosProjeto.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblNomeMembrosProjeto.setText("jLabel4");
+
+        btnEditarProjeto.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnEditarProjeto.setText("Editar Projeto");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblNomeProjeto)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNomeProjeto)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(lblDescricao))
-                            .addComponent(lblNomeLider)))
-                    .addComponent(jLabel1)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(lblDescricao))
+                                    .addComponent(lblNomeLider)))
+                            .addComponent(jLabel1)
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblNomeMembrosProjeto))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(104, 104, 104)
+                        .addComponent(btnEditarProjeto)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,21 +177,31 @@ public class PainelVisualizarProjeto extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(lblNomeMembrosProjeto))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEditarProjeto)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditarProjeto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDescricao;
     private javax.swing.JLabel lblNomeLider;
+    private javax.swing.JLabel lblNomeMembrosProjeto;
     private javax.swing.JLabel lblNomeProjeto;
     private javax.swing.JPanel painelGrid;
     // End of variables declaration//GEN-END:variables

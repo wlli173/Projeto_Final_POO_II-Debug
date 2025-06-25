@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,41 @@ public class ProjetoDAO {
         }
 
     }
+    
+    public int inserirProjetoRetornandoId(Projeto projeto) {
+
+        String sql = "INSERT INTO projetos (nome, descricao, data_criacao, data_fim_prevista, id_lider) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, projeto.getNome());
+            pstmt.setString(2, projeto.getDescricao());
+            pstmt.setString(3, projeto.getDataCriacao());
+            pstmt.setString(4, projeto.getDataFimPrevista());
+            pstmt.setInt(5, projeto.getIdLider());
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                // Usar função SQLite para obter o último ID inserido nesta conexão
+                try (Statement stmt = conn.createStatement();
+                     ResultSet rs = stmt.executeQuery("SELECT last_insert_rowid()")) {
+                    if (rs.next()) {
+                        return rs.getInt(1); // Retorna o ID gerado
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("DAO.ProjetoDAO.inserirProjetoRetornandoId()");
+            System.out.println("Erro: " + e.getMessage());
+        }
+
+        return -1; // Em caso de erro
+    }
+
+
 
     public void atualizarProjeto(Projeto projeto) {
         
@@ -277,7 +313,7 @@ public class ProjetoDAO {
                     rs.getString("titulo"),
                     rs.getString("descricao"),
                     rs.getString("data_fim_prevista"),
-                    StatusTarefa.valueOf(rs.getString("status")),
+                    StatusTarefa.fromDescricao(rs.getString("status")),
                     rs.getInt("id_projeto"),
                     rs.getInt("id_responsavel")
                 );

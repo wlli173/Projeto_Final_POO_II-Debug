@@ -7,6 +7,7 @@ package app;
 import DAO.MembrosProjetoDAO;
 import DAO.ProjetoDAO;
 import DAO.TarefaDAO;
+import DAO.UsuariosDAO;
 import java.util.List;
 import model.Projeto;
 import model.StatusTarefa;
@@ -69,13 +70,14 @@ public class Main {
         //Inicializar o banco de dados
         DBSetup.criarTabelas();
 
-        /*
+        /* TODO HABILITAR NOVAMENTE ao final dos testes
         TelaLogin telalogin = new TelaLogin();
         telalogin.setVisible(true);
         */
 
         Usuario usuario = new Usuario(1,"willighan", "willighan173@gmail.com", "");
         SessaoUsuario.login(usuario);
+       
         
         TelaPrincipal telaprincipal = new TelaPrincipal();
         telaprincipal.setVisible(true);

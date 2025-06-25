@@ -85,7 +85,7 @@ public class PainelProjetos extends javax.swing.JPanel {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
-        jButton1 = new javax.swing.JButton();
+        btnNovoProjeto = new javax.swing.JButton();
         rBtnMeusProjetos = new javax.swing.JRadioButton();
         rBtnMembroProjetos = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -93,8 +93,13 @@ public class PainelProjetos extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(1047, 457));
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton1.setText("Novo Projeto");
+        btnNovoProjeto.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnNovoProjeto.setText("Novo Projeto");
+        btnNovoProjeto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoProjetoActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rBtnMeusProjetos);
         rBtnMeusProjetos.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -135,25 +140,25 @@ public class PainelProjetos extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
+                    .addComponent(btnNovoProjeto)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(rBtnMeusProjetos)
                         .addGap(18, 18, 18)
                         .addComponent(rBtnMembroProjetos)))
-                .addContainerGap(641, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(btnNovoProjeto)
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rBtnMeusProjetos)
                     .addComponent(rBtnMembroProjetos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
+                .addComponent(jScrollPane1))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -167,11 +172,17 @@ public class PainelProjetos extends javax.swing.JPanel {
         carregarDados();
     }//GEN-LAST:event_rBtnMembroProjetosActionPerformed
 
+    private void btnNovoProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoProjetoActionPerformed
+        
+        mediator.abrirCriacaoProjeto();
+        
+    }//GEN-LAST:event_btnNovoProjetoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnNovoProjeto;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel painelGrid;
     private javax.swing.JRadioButton rBtnMembroProjetos;

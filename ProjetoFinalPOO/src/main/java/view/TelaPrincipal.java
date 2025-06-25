@@ -33,7 +33,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         this.mediator = new NavegacaoMediator(this);
         
-        this.painelTarefas = new PainelTarefas();
+        this.painelTarefas = new PainelTarefas(this.mediator);
         this.painelProjetos = new PainelProjetos(this.mediator);
         
         // Layout manager/Gerenciador de "sub-telas" para a troca entre os Jpanels

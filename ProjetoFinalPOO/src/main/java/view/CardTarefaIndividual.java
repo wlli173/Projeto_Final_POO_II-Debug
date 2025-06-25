@@ -4,6 +4,9 @@
  */
 package view;
 
+import controle.NavegacaoMediator;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import model.Tarefa;
 
 /**
@@ -15,13 +18,28 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
     /**
      * Creates new form CardTarefaIndividual
      */
-    public CardTarefaIndividual() {
+    private NavegacaoMediator mediator;
+    private Tarefa tarefa;
+    
+    public CardTarefaIndividual(Tarefa tarefa, NavegacaoMediator mediator) {
+        
         initComponents();
+        
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    mediator.abrirVisualizacaoTarefa(tarefa);
+                }
+            }
+        });
+        
     }
 
     public void setDados(Tarefa tarefa){
         
         this.lblNomeTarefa.setText(tarefa.getTitulo());
+        this.lblNomeResponsável.setText(tarefa.getUsuarioResponsavel().getNome());
         this.lblDescricaoTarefa.setText(tarefa.getDescricao());
         this.lblStatusTarefa.setText(tarefa.getStatus().getDescricao());
         
@@ -40,6 +58,7 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
         lblDescricaoTarefa = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lblStatusTarefa = new javax.swing.JLabel();
+        lblNomeResponsável = new javax.swing.JLabel();
 
         lblNomeTarefa.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblNomeTarefa.setText("jLabel1");
@@ -53,6 +72,8 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
         lblStatusTarefa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblStatusTarefa.setText("jLabel2");
 
+        lblNomeResponsável.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -60,7 +81,10 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblNomeTarefa)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblNomeTarefa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblNomeResponsável))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -69,13 +93,15 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(lblStatusTarefa))
                             .addComponent(lblDescricaoTarefa))))
-                .addContainerGap(292, Short.MAX_VALUE))
+                .addContainerGap(279, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblNomeTarefa)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNomeTarefa)
+                    .addComponent(lblNomeResponsável))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDescricaoTarefa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -90,6 +116,7 @@ public class CardTarefaIndividual extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblDescricaoTarefa;
+    private javax.swing.JLabel lblNomeResponsável;
     private javax.swing.JLabel lblNomeTarefa;
     private javax.swing.JLabel lblStatusTarefa;
     // End of variables declaration//GEN-END:variables

@@ -27,6 +27,11 @@ public class UsuariosDAO {
             System.out.println("Erro: " + e.getMessage());
         }
     }
+    
+    public void inserirUsuario(Usuario usuario) {
+        inserirUsuario(usuario.getNome(), usuario.getEmail(), usuario.getSenhaHash());
+    }
+
 
     public List<Usuario> listarUsuarios() {
         

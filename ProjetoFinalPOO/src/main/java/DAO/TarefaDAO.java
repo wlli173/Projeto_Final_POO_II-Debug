@@ -47,7 +47,7 @@ public class TarefaDAO {
             preparedStatement.setString(1, tarefa.getTitulo());
             preparedStatement.setString(2, tarefa.getDescricao());
             preparedStatement.setString(3, tarefa.getDataFimPrevisto());
-            preparedStatement.setString(4, tarefa.getStatus().toString());
+            preparedStatement.setString(4, tarefa.getStatus().getDescricao());
             preparedStatement.setInt(5, tarefa.getIdTarefa());
             
             preparedStatement.executeUpdate();

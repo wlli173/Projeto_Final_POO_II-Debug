@@ -1,5 +1,7 @@
 package model;
 
+import DAO.UsuariosDAO;
+
 public class Comentario {
 
     private int idComentario;
@@ -19,6 +21,12 @@ public class Comentario {
     public Comentario(String conteudo, String dataComentario, int idTarefa, int idUsuario) {
         this.conteudo = conteudo;
         this.dataComentario = dataComentario;
+        this.idTarefa = idTarefa;
+        this.idUsuario = idUsuario;
+    }
+    
+     public Comentario(String conteudo, int idTarefa, int idUsuario) {
+        this.conteudo = conteudo;
         this.idTarefa = idTarefa;
         this.idUsuario = idUsuario;
     }
@@ -57,6 +65,11 @@ public class Comentario {
 
     public int getIdUsuario() {
         return idUsuario;
+    }
+    
+    public Usuario getAutor(){
+        UsuariosDAO usuariosDAO = new UsuariosDAO();
+        return usuariosDAO.buscarUsuarioPorId(idUsuario);
     }
 
     public void setIdUsuario(int idUsuario) {

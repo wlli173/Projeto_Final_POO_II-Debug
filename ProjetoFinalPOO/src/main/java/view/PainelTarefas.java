@@ -5,6 +5,7 @@
 package view;
 
 import DAO.ProjetoDAO;
+import controle.NavegacaoMediator;
 import java.awt.GridLayout;
 import java.util.List;
 
@@ -21,10 +22,14 @@ public class PainelTarefas extends javax.swing.JPanel {
     /**
      * Creates new form PainelTarefas
      */
-    public PainelTarefas() {
+    
+    private NavegacaoMediator mediator;
+    
+    public PainelTarefas(NavegacaoMediator mediator) {
         
         initComponents();
         
+        this.mediator = mediator;
         this.painelGrid.setLayout(new GridLayout(0,1,10,10));
         
     }
@@ -52,7 +57,7 @@ public class PainelTarefas extends javax.swing.JPanel {
             
             for(Tarefa tarefa : projeto.getTarefas()){
                 
-                CardTarefaIndividual cardTarefaIndividual = new CardTarefaIndividual();
+                CardTarefaIndividual cardTarefaIndividual = new CardTarefaIndividual(tarefa, mediator);
                 cardTarefaIndividual.setDados(tarefa);
                 cardTarefasPorProjeto.adicionarCardTarefa(cardTarefaIndividual);
                 
